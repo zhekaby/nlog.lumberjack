@@ -1,5 +1,5 @@
 # NLog Lumberjack target
-NLog target. Send events (logs, metrics and alerts) using Lumberjack protocol.
+NLog target. Sends events (logs, metrics and alerts) using Lumberjack protocol.
 ##1. Overview
 NLog Lumberjack target allows to send logs, metrics and alerts using Lumberjack protocol.
 Installation guide: [ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-4-on-ubuntu-14-04), [centos](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-4-on-centos-7])
