@@ -3,8 +3,8 @@ NLog target. Send events (logs, metrics and alerts) using Lumberjack protocol.
 ##1.Overview
 NLog Lumberjack target allows to send logs, metrics and alerts using Lumberjack protocol.
 Installation guide: [ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-4-on-ubuntu-14-04), [centos](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-4-on-centos-7])
-##1. Environment configuration
-###1.1 Logstash
+##2. Environment configuration
+###2.1 Logstash
 Configure input Lumberjack plugin for Logstash 
 ```
 input {
@@ -15,17 +15,17 @@ input {
   }
 }
 ```
-###1.2 Install certificate to your system
+###2.2 Install certificate to your system
 Install certificate to `Local Machine` store. Select `Automaticaly select the certificate store based on the type of certificate`
-###1.3 Copy certificate thumbprint
+###2.3 Copy certificate thumbprint
 Double click to `.crt` file, go `Details` tab and copy `Thumbprint` field
-##2 NLog target configuration
-###2.1 Install package
+##3. NLog target configuration
+###3.1 Install package
 To install NLog.LumberjackTarget, run the following command in the Package Manager Console
 ```
 PM> Install-Package NLog.LumberjackTarget
 ```
-###2.2 Add NLog section to your `App.config` file
+###3.2 Add NLog section to your `App.config` file
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
