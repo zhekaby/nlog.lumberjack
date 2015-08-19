@@ -13,16 +13,8 @@ using System.Threading.Tasks;
 
 namespace NLog.Targets.Lumberjack
 {
-    class LumberjackProtocol : IDisposable
+    class LumberjackProtocol
     {
-        private SslStream stream;
-        int counter;
-        public string Host { get; set; }
-        public int Port { get; set; } = 5000;
-        public string Thumbprint { get; set; }
-
-        private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1);
-
         private void WriteKVP(Stream stream, string key, string value)
         {
             var lenBuff = new byte[4];
@@ -45,10 +37,8 @@ namespace NLog.Targets.Lumberjack
             stream.Write(dataBuff, 0, dataBuff.Length);
         }
 
-        internal async Task SendDataFrameAsync(Dictionary<string, object> data, int sequenceID)
+        internal byte[] CreatePacket(Dictionary<string, object> data, int sequenceID)
         {
-            //Debug.WriteLine("Seq: " + sequenceID);
-            byte[] bytes;
             using (var mem = new MemoryStream())
             {
                 mem.WriteByte(1);
@@ -66,61 +56,8 @@ namespace NLog.Targets.Lumberjack
                 {
                     WriteKVP(mem, property.Key, property.Value as string ?? string.Empty);
                 }
-                bytes = mem.ToArray();
+                return mem.ToArray();
             }
-
-            await _lock.WaitAsync();
-            try
-            {
-                await EnsureConnectedAsync();
-                await stream.WriteAsync(bytes, 0, bytes.Length);
-                //Debug.WriteLine("Write: " + ++counter);
-            }
-            catch (IOException ex)
-            {
-                //TODO: save packet
-                //Debug.WriteLine(ex);
-                CloseStream();
-            }
-            catch (Exception ex)
-            {
-                //Debug.WriteLine(ex);
-                CloseStream();
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
-
-        private async Task EnsureConnectedAsync()
-        {
-            if (stream != null)
-            {
-                return;
-            }
-
-            var tcpClient = new TcpClient();
-            await tcpClient.ConnectAsync(Host, Port);
-            stream = new SslStream(tcpClient.GetStream(), false, (source, cert, chain, policy) =>
-            {
-                return Thumbprint.Equals(cert.GetCertHashString(), StringComparison.OrdinalIgnoreCase);
-            });
-            await stream.AuthenticateAsClientAsync("", new X509CertificateCollection(), SslProtocols.Tls, true);
-        }
-
-        private void CloseStream()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
-        }
-
-        public void Dispose()
-        {
-            CloseStream();
         }
     }
 }

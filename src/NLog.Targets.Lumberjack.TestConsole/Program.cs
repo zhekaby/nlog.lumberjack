@@ -34,14 +34,13 @@ namespace NLog.Targets.Lumberjack.TestConsole
                     }
                 };
                 nlog.Log(log);
-
                 Thread.Sleep(10);
             }
             // sending alert
             //var alert = new LumberjackAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!");
             //nlog.Alert(alert);
 
-            Thread.Sleep(TimeSpan.FromSeconds(2000));
+            //Thread.Sleep(TimeSpan.FromSeconds(2000));
         }
 
         public static long UnixTimeNow()

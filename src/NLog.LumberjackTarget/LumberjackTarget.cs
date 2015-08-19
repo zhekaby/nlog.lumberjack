@@ -11,58 +11,55 @@ namespace NLog.Targets.Lumberjack
     [Target("Lumberjack")]
     public class LumberjackTarget : TargetWithLayout
     {
-        private readonly LumberjackProtocol _protocol = new LumberjackProtocol();
+        private LumberjackProtocol _protocol = new LumberjackProtocol();
+        private Transport _transport;
 
+        #region parameters
         [RequiredParameter]
-        public string Host
+        public string Host { get; set; }
+        public int Port { get; set; } = 5000;
+        [RequiredParameter]
+        public string Thumbprint { get; set; }
+        #endregion
+
+        protected override void InitializeTarget()
         {
-            get
+            if (_transport != null)
             {
-                return _protocol.Host;
+                _transport.Dispose();
             }
-            set
+            _transport = new Transport()
             {
-                _protocol.Host = value;
-            }
-        }
-        public int Port
-        {
-            get
-            {
-                return _protocol.Port;
-            }
-            set
-            {
-                _protocol.Port = value;
-            }
+                Host = Host,
+                Port = Port,
+                Thumbprint = Thumbprint,
+            };
         }
 
-        [RequiredParameter]
-        public string Thumbprint
+        protected override void CloseTarget()
         {
-            get
-            {
-                return _protocol.Thumbprint;
-            }
-            set
-            {
-                _protocol.Thumbprint = value;
-            }
+            _transport.Dispose();
+            _transport = null;
         }
 
         protected override void Write(AsyncLogEventInfo logEvent)
         {
-            WriteAsyncInternal(logEvent.LogEvent)
-                .ContinueWith(t =>
-                {
-                    logEvent.Continuation(t.Exception);
-                });
+            var packet = CreatePacket(logEvent.LogEvent);
+            _transport.Send(packet);
         }
 
+        protected override void Write(LogEventInfo logEvent)
+        {
+            var packet = CreatePacket(logEvent);
+            _transport.Send(packet);
+        }
 
+        protected override void Write(AsyncLogEventInfo[] logEvents)
+        {
+            Array.ForEach(logEvents, e => Write(e));
+        }
 
-
-        private async Task WriteAsyncInternal(LogEventInfo logEvent)
+        private byte[] CreatePacket(LogEventInfo logEvent)
         {
             var data = logEvent.Properties["data"] as LumberjackMessageBase;
             var log = new Dictionary<string, object>
@@ -82,7 +79,6 @@ namespace NLog.Targets.Lumberjack
                 if (message != null)
                 {
                     log["type"] = "logs";
-                    log["id"] = Guid.NewGuid().ToString("N");
                     log["level"] = message.Level.Name;
                     log["line"] = message.Message;
                     log["props"] = JsonConvert.SerializeObject(new Dictionary<string, object>
@@ -91,8 +87,7 @@ namespace NLog.Targets.Lumberjack
                         { "tags", message.Tags }
                     });
 
-                    await _protocol.SendDataFrameAsync(log, logEvent.SequenceID);
-                    return;
+                    return _protocol.CreatePacket(log, logEvent.SequenceID);
                 }
             }
 
@@ -109,11 +104,10 @@ namespace NLog.Targets.Lumberjack
                     {
                         log["line"] = string.Format("{0}.{1}.{2}.{3} {4} {5}", data.Source, data.ApplicationId, data.Component, message.Name, message.Value, message.UnixTimestamp);
                     }
-                    await _protocol.SendDataFrameAsync(log, logEvent.SequenceID);
-                    return;
+                    return _protocol.CreatePacket(log, logEvent.SequenceID);
                 }
 
-                
+
             }
 
             {
@@ -124,13 +118,11 @@ namespace NLog.Targets.Lumberjack
                     log["line"] = message.Text;
                     log["rule"] = message.RuleName;
 
-                    await _protocol.SendDataFrameAsync(log, logEvent.SequenceID);
-                    return;
+                    return _protocol.CreatePacket(log, logEvent.SequenceID);
                 }
             }
 
             throw new NotSupportedException("Log type is not supported");
-
         }
     }
 }
