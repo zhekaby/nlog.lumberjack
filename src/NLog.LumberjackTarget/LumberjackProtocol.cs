@@ -79,11 +79,13 @@ namespace NLog.Targets.Lumberjack
             catch (IOException ex)
             {
                 //TODO: save packet
-                Debug.WriteLine(ex);
+                //Debug.WriteLine(ex);
+                CloseStream();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                //Debug.WriteLine(ex);
+                CloseStream();
             }
             finally
             {
@@ -91,17 +93,12 @@ namespace NLog.Targets.Lumberjack
             }
         }
 
-        private async Task EnsureConnectedAsync(bool force = false)
+        private async Task EnsureConnectedAsync()
         {
-            if (stream != null && !force)
+            if (stream != null)
             {
                 return;
             }
-
-            if (stream != null)
-                stream.Dispose();
-
-            stream = null;
 
             var tcpClient = new TcpClient();
             await tcpClient.ConnectAsync(Host, Port);
@@ -112,11 +109,18 @@ namespace NLog.Targets.Lumberjack
             await stream.AuthenticateAsClientAsync("", new X509CertificateCollection(), SslProtocols.Tls, true);
         }
 
-        public void Dispose()
+        private void CloseStream()
         {
             if (stream != null)
+            {
                 stream.Dispose();
-            stream = null;
+                stream = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            CloseStream();
         }
     }
 }
