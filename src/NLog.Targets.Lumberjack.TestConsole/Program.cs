@@ -19,29 +19,32 @@ namespace NLog.Targets.Lumberjack.TestConsole
                 return true;
             };
 
-            //sending metric
-            var message = new LumberjackMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), 100.0)
+            for (;;)
             {
-                MachineName = Environment.MachineName
-            };
+                //sending metric
+                var message = new LumberjackMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), new Random().Next(50, 100))
+                {
+                    MachineName = Environment.MachineName
+                };
+                nlog.Measure(message);
 
-            nlog.Measure(message);
 
-
-            // sending log
-            var log = new LumberjackLogMessage("yourid", "backend", "vp", LogLevel.Info, "My info message")
-            {
-                Tags = new HashSet<string> { "tag01", "tag02", "tag03" },
-                Fields = new Dictionary<string, object> {
+                // sending log
+                var log = new LumberjackLogMessage("yourid", "backend", "vp", LogLevel.Info, "My info message")
+                {
+                    Tags = new HashSet<string> { "tag01", "tag02", "tag03" },
+                    Fields = new Dictionary<string, object> {
                         { "mem", "256"},
                         { "load", 0.3},
                     }
-            };
-            nlog.Log(log);
+                };
+                nlog.Log(log);
 
+                Thread.Sleep(10);
+            }
             // sending alert
-            var alert = new LumberjackAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!");
-            nlog.Alert(alert);
+            //var alert = new LumberjackAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!");
+            //nlog.Alert(alert);
 
             Thread.Sleep(TimeSpan.FromSeconds(2000));
         }

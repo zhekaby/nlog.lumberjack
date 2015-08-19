@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Security;
@@ -15,7 +16,7 @@ namespace NLog.Targets.Lumberjack
     class LumberjackProtocol : IDisposable
     {
         private SslStream stream;
-
+        int counter;
         public string Host { get; set; }
         public int Port { get; set; } = 5000;
         public string Thumbprint { get; set; }
@@ -46,8 +47,8 @@ namespace NLog.Targets.Lumberjack
 
         internal async Task SendDataFrameAsync(Dictionary<string, object> data, int sequenceID)
         {
-            await EnsureConnectedAsync();
-
+            //Debug.WriteLine("Seq: " + sequenceID);
+            byte[] bytes;
             using (var mem = new MemoryStream())
             {
                 mem.WriteByte(1);
@@ -65,20 +66,28 @@ namespace NLog.Targets.Lumberjack
                 {
                     WriteKVP(mem, property.Key, property.Value as string ?? string.Empty);
                 }
+                bytes = mem.ToArray();
+            }
 
-                await _lock.WaitAsync();
-                try
-                {
-                    await stream.WriteAsync(mem.ToArray(), 0, (int)mem.Length);
-                }
-                catch (IOException)
-                {
-                    //TODO: save packet
-                }
-                finally
-                {
-                    _lock.Release();
-                }
+            await _lock.WaitAsync();
+            try
+            {
+                await EnsureConnectedAsync();
+                await stream.WriteAsync(bytes, 0, bytes.Length);
+                //Debug.WriteLine("Write: " + ++counter);
+            }
+            catch (IOException ex)
+            {
+                //TODO: save packet
+                Debug.WriteLine(ex);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
