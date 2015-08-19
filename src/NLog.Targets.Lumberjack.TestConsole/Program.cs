@@ -14,11 +14,6 @@ namespace NLog.Targets.Lumberjack.TestConsole
 
         static void Main(string[] args)
         {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) =>
-            {
-                return true;
-            };
-
             for (;;)
             {
                 //sending metric
