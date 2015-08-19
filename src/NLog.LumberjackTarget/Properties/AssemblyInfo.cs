@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NLog.LumberjackTarget")]
 [assembly: AssemblyDescription("NLog lumberjack protocol")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("zhekaby")]
 [assembly: AssemblyProduct("NLog.Targets.Lumberjack")]
 [assembly: AssemblyCopyright("Copyright © 2015")]
 [assembly: AssemblyTrademark("")]
