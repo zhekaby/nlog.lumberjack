@@ -60,9 +60,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NLog.Targets.Lumberjack\NLog.Targets.Lumberjack.csproj">
+    <ProjectReference Include="..\NLog.LumberjackTarget\NLog.LumberjackTarget.csproj">
       <Project>{ee2ff7f6-7073-43fd-b4fd-c05def0efe63}</Project>
-      <Name>NLog.Targets.Lumberjack</Name>
+      <Name>NLog.LumberjackTarget</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
