@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/zhekaby/nlog.lumberjack</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Concurrent queue implimentation. Unnecessary property 'id' removed.</releaseNotes>
+    <releaseNotes>Please, refer to project page on github https://github.com/zhekaby/nlog.lumberjack </releaseNotes>
     <copyright>zhekaby 2015</copyright>
     <tags>nlog lumberjack logstash log logging</tags>
   </metadata>
