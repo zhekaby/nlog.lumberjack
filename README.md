@@ -41,7 +41,7 @@ PM> Install-Package NLog.LumberjackTarget
     </extensions>
 
     <targets async="true">
-      <target name="MyLogstashServer" xsi:type="Lumberjack" host=<YOUR HOST NAME HERE>" Thumbprint="<YOUR HOST CERTIFICATE THUMBPRINT HERE>"  />
+      <target name="MyLogstashServer" xsi:type="Lumberjack" host="<YOUR HOST NAME HERE>" Thumbprint="<YOUR HOST CERTIFICATE THUMBPRINT WHITHOUT SPACES HERE>"  />
     </targets>
 
     <rules>
@@ -50,4 +50,8 @@ PM> Install-Package NLog.LumberjackTarget
     
   </nlog>
 </configuration>
+```
+ex.: 
+```
+<target name="MyLogstashServer" xsi:type="Lumberjack" host="logs.myserver.com" Thumbprint="03E50C24E29F5AE39CDB83411102861828793D3F"  />
 ```
