@@ -9,8 +9,11 @@
     <projectUrl>https://github.com/zhekaby/nlog.lumberjack</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Please, refer to project page on github https://github.com/zhekaby/nlog.lumberjack </releaseNotes>
+    <releaseNotes>Please, refer to project page on github</releaseNotes>
     <copyright>zhekaby 2015</copyright>
     <tags>nlog lumberjack logstash log logging</tags>
   </metadata>
+  <files>
+    <file src="bin\Release\*.*" target="lib" />
+  </files>
 </package>
