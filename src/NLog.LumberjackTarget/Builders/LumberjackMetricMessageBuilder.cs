@@ -4,7 +4,7 @@ using NLog.Targets.Lumberjack.Loggers;
 
 namespace NLog.Targets.Lumberjack.Builders
 {
-    public class LumberjackMetricMessageBuilder : LumberjackBaseMessageBuilder
+    public class LumberjackMetricMessageBuilder : LumberjackMessageBuilderBase
     {
         private LumberjackMetricMessage measureMessage;
 

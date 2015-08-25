@@ -5,7 +5,7 @@ using System;
 
 namespace NLog.Targets.Lumberjack.Builders
 {
-    public class LumberjackLogMessageBuilder : LumberjackBaseMessageBuilder
+    public class LumberjackLogMessageBuilder : LumberjackMessageBuilderBase
     {
         private LumberjackLogMessage logMessage;
 

@@ -3,7 +3,7 @@
 
 namespace NLog.Targets.Lumberjack.Builders
 {
-    public class LumberjackAlertMessageBuilder : LumberjackBaseMessageBuilder
+    public class LumberjackAlertMessageBuilder : LumberjackMessageBuilderBase
     {
         private LumberjackAlertMessage alertMessage;
 

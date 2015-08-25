@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Builders\LumberjackAlertMessageBuilder.cs" />
     <Compile Include="Builders\LumberjackLogMessageBuilder.cs" />
-    <Compile Include="Builders\LumberjackBaseMessageBuilder.cs" />
+    <Compile Include="Builders\LumberjackMessageBuilderBase.cs" />
     <Compile Include="Builders\LumberjackMetricMessageBuilder.cs" />
     <Compile Include="Loggers\NLogLogger.cs" />
     <Compile Include="Builders\IMessageLogger.cs" />
