@@ -13,8 +13,4 @@
     <copyright>zhekaby 2015</copyright>
     <tags>nlog lumberjack logstash log logging</tags>
   </metadata>
-  <files>
-    <file src="bin\Release\*.*" target="deploy" />
-    <file src="bin\Release\*.*" exclude="*.pdb" />
-  </files>
 </package>
