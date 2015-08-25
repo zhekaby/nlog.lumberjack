@@ -1,4 +1,4 @@
-﻿namespace NLog.Targets.Lumberjack.Settings
+﻿namespace NLog.Targets.Lumberjack.Builders
 {
     public interface IComponentSettings
     {

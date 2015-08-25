@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using NLog.Targets.Lumberjack.Builders;
 using NLog.Targets.Lumberjack.Loggers;
-using NLog.Targets.Lumberjack.Settings;
+
 
 namespace NLog.Targets.Lumberjack.TestConsole
 {
@@ -12,7 +12,6 @@ namespace NLog.Targets.Lumberjack.TestConsole
         {
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Register(x => LogManager.GetCurrentClassLogger()).As<ILogger>();
-            //containerBuilder.RegisterType<Logger>().As<ILogger>();
             containerBuilder.RegisterType<NlogLogger>().As<IMessageLogger>();
             containerBuilder.RegisterType<ComponentSettings>().As<IComponentSettings>();
             containerBuilder.RegisterType<LumberjackMetricMessageBuilder>();

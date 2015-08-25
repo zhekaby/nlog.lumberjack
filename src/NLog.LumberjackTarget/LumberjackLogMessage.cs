@@ -27,6 +27,7 @@ namespace NLog.Targets.Lumberjack
         {
             Level = level;
             Message = message;
+            Tags = new HashSet<string>();
         }
 
         public LogLevel Level { get; set; }

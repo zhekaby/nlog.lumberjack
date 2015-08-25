@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog.Targets.Lumberjack.Loggers;
-using NLog.Targets.Lumberjack.Settings;
+using System;
 
 namespace NLog.Targets.Lumberjack.Builders
 {
@@ -17,17 +17,7 @@ namespace NLog.Targets.Lumberjack.Builders
 
         public LumberjackLogMessageBuilder Tags(params string[] tags)
         {
-            if (this.logMessage.Tags == null && tags.Any())
-            {
-                this.logMessage.Tags = new HashSet<string>();
-            }
-            foreach (var tag in tags)
-            {
-                if (!this.logMessage.Tags.Contains(tag))
-                {
-                    this.logMessage.Tags.Add(tag);
-                };
-            }
+            Array.ForEach(tags, t => this.logMessage.Tags.Add(t));
             return this;
         }
 
@@ -37,14 +27,7 @@ namespace NLog.Targets.Lumberjack.Builders
             {
                 this.logMessage.Fields = new Dictionary<string, object>();
             }
-            if (!this.logMessage.Fields.ContainsKey(key))
-            {
-                this.logMessage.Fields.Add(key, value);
-            }
-            else
-            {
-                this.logMessage.Fields[key] = value;
-            }
+            this.logMessage.Fields[key] = value;
             return this;
         }
 

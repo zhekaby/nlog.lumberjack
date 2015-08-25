@@ -1,5 +1,5 @@
 ﻿using NLog.Targets.Lumberjack.Loggers;
-using NLog.Targets.Lumberjack.Settings;
+
 
 namespace NLog.Targets.Lumberjack.Builders
 {

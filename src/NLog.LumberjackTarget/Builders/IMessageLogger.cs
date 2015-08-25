@@ -1,4 +1,4 @@
-﻿namespace NLog.Targets.Lumberjack.Loggers
+﻿namespace NLog.Targets.Lumberjack.Builders
 {
     public interface IMessageLogger
     {

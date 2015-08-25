@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog.Fluent;
+using NLog.Targets.Lumberjack.Builders;
 
 namespace NLog.Targets.Lumberjack.Loggers
 {
