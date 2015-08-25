@@ -8,7 +8,7 @@ namespace NLog.Targets.Lumberjack
 {
     public static class LoggerExtensions
     {
-        public static void Log(this NLog.Logger logger, LumberjackLogMessage message)
+        public static void Log(this NLog.Logger logger, LumberjackMessage message)
         {
             if (message == null || message.Source == null || message.ApplicationId == null || message.Component == null)
             {
@@ -23,7 +23,6 @@ namespace NLog.Targets.Lumberjack
             info.Properties.Add("data", message);
             logger.Log(typeof(LoggerExtensions), info);
         }
-
         public static void Measure(this NLog.Logger logger, LumberjackMetricMessage message)
         {
             if (message == null || message.Source == null || message.ApplicationId == null || message.Component == null)
@@ -44,7 +43,6 @@ namespace NLog.Targets.Lumberjack
             info.Properties.Add("data", message);
             logger.Log(typeof(LoggerExtensions), info);
         }
-
         public static void Alert(this NLog.Logger logger, LumberjackAlertMessage message)
         {
             if (message == null || message.Source == null || message.ApplicationId == null || message.Component == null)
@@ -59,6 +57,11 @@ namespace NLog.Targets.Lumberjack
 
             info.Properties.Add("data", message);
             logger.Log(typeof(LoggerExtensions), info);
+        }
+
+        public static LumberjackMessageBuilder Setup(this NLog.Logger logger, string source, string app_id, string component)
+        {
+            return new LumberjackMessageBuilder(logger, source, app_id, component);
         }
     }
 }

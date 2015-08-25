@@ -75,7 +75,7 @@ namespace NLog.Targets.Lumberjack
             }
 
             {
-                var message = data as LumberjackLogMessage;
+                var message = data as LumberjackMessage;
                 if (message != null)
                 {
                     log["type"] = "logs";

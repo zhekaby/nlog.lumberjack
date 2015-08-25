@@ -49,21 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\LumberjackAlertMessageBuilder.cs" />
-    <Compile Include="Builders\LumberjackLogMessageBuilder.cs" />
-    <Compile Include="Builders\LumberjackMessageBuilderBase.cs" />
-    <Compile Include="Builders\LumberjackMetricMessageBuilder.cs" />
-    <Compile Include="Loggers\NLogLogger.cs" />
-    <Compile Include="Builders\IMessageLogger.cs" />
-    <Compile Include="LumberjackLogMessage.cs" />
+    <Compile Include="LoggerExtensions.cs" />
+    <Compile Include="LumberjackMessage.cs" />
+    <Compile Include="LumberjackMessageBuilder.cs" />
     <Compile Include="LumberjackProtocol.cs" />
     <Compile Include="LumberjackTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Builders\IComponentSettings.cs" />
     <Compile Include="Transport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Loggers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

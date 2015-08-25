@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NLog.Targets.Lumberjack
 {
@@ -19,14 +20,12 @@ namespace NLog.Targets.Lumberjack
         public string MachineName { get; set; }
     }
 
-    public class LumberjackLogMessage : LumberjackMessageBase
+    public class LumberjackMessage : LumberjackMessageBase
     {
-        public LumberjackLogMessage() { }
-        public LumberjackLogMessage(string source, string applicationId, string component, LogLevel level, string message)
+        public LumberjackMessage(string source, string applicationId, string component)
             : base(source, applicationId, component)
         {
-            Level = level;
-            Message = message;
+            Level = LogLevel.Trace;
             Tags = new HashSet<string>();
         }
 
@@ -38,14 +37,12 @@ namespace NLog.Targets.Lumberjack
 
     public class LumberjackMetricMessage : LumberjackMessageBase
     {
-        public LumberjackMetricMessage(){ }
-
-        public LumberjackMetricMessage(string source, string applicationId, string component, string name, long unixTimestamp, double value)
+        public LumberjackMetricMessage(string source, string applicationId, string component, string name, double value, long timestamp)
             : base(source, applicationId, component)
         {
             Name = name;
-            UnixTimestamp = unixTimestamp;
             Value = value;
+            UnixTimestamp = timestamp;
         }
         public double Value { get; set; }
         public long UnixTimestamp { get; set; }
@@ -54,8 +51,6 @@ namespace NLog.Targets.Lumberjack
 
     public class LumberjackAlertMessage : LumberjackMessageBase
     {
-        public LumberjackAlertMessage() { }
-
         public LumberjackAlertMessage(string source, string applicationId, string component, string ruleName, string text)
              : base(source, applicationId, component)
         {

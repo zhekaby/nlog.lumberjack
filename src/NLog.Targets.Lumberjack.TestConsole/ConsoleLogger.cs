@@ -15,7 +15,7 @@ namespace NLog.Targets.Lumberjack.TestConsole
             return String.Format("source:{0}\tapplication_id:{1}\tcomponent:{2}\tmachine_name:{3}", message.Source, message.ApplicationId, message.Component, message.MachineName);
         }
 
-        public void LogMessage(LumberjackLogMessage logMessage)
+        public void LogMessage(LumberjackMessage logMessage)
         {
             string bs = GetLine(logMessage);
             Console.WriteLine(String.Format("log_message:\t{0}\tlevel:{1}\ttags:{2}\tfields:{3}\tmessage:{4}",

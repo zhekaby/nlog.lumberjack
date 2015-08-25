@@ -1,41 +1,35 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using NLog.Targets.Lumberjack;
+using System.Collections.Generic;
 
 namespace NLog.Targets.Lumberjack.TestConsole
 {
     class Program
     {
-        //private static readonly NLog.Logger nlog = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger nlog = NLog.LogManager.GetCurrentClassLogger();
 
         private static void Main(string[] args)
         {
             for (;;)
             {
-                //Log.Metric()
-                //   .Name("auth")
-                //   .Value(new Random().Next(50, 100))
-                //   .Commit();
+                nlog.Setup("yourid", "vp", "auth")
 
-                Log.Message()
-                   .Tags("tag01", "tag02", "tag03")
-                   .Level(LogLevel.Info)
-                   .Field("mem", "256").Field("load", 0.3)
-                   .Message("My info message " + Guid.NewGuid())
-                   .Commit();
+                    .Log(LogLevel.Debug, "Debug message")
+                    .WithTags("tag1")
+                    .WithTags("tag2", "tag3", "tag10")
+                    .WithField("timeout", 0.3)
+                    .WithFields(new Dictionary<string, object> {
+                        { "cpu", 0.5},
+                        { "mem", 512}
+                    })
+                    .Alert("myrule", "event raised!")
+                    .Measure("auth", 100)
+                    .Commit();
 
-                //Log.Alert()
-                //.Rule("myrule")
-                //.Text("Event raised!")
-                //.Commit();
-
-                Thread.Sleep(10);
+                Thread.Sleep(1000);
             }
-
-            // sending alert
-            //var alert = new LumberjackAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!");
-            //nlog.Alert(alert);
-            Thread.Sleep(TimeSpan.FromSeconds(2000));
         }
     }
 }
