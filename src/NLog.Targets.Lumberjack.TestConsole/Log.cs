@@ -11,9 +11,9 @@ namespace NLog.Targets.Lumberjack.TestConsole
         static Log()
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.Register(x => LogManager.GetCurrentClassLogger()).As<Logger>();
-            containerBuilder.RegisterType<Logger>().As<ILogger>();
-            containerBuilder.RegisterType<ConsoleLogger>().As<IMessageLogger>();
+            containerBuilder.Register(x => LogManager.GetCurrentClassLogger()).As<ILogger>();
+            //containerBuilder.RegisterType<Logger>().As<ILogger>();
+            containerBuilder.RegisterType<NlogLogger>().As<IMessageLogger>();
             containerBuilder.RegisterType<ComponentSettings>().As<IComponentSettings>();
             containerBuilder.RegisterType<LumberjackMetricMessageBuilder>();
             containerBuilder.RegisterType<LumberjackAlertMessageBuilder>();
