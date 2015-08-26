@@ -28,7 +28,7 @@ namespace NLog.Targets.Lumberjack
     {
         public static LumberjackMessageBuilder Log(this LumberjackMessageBuilder builder, LogLevel logLevel, string message)
         {
-            builder.LogMessage = new LumberjackMessage(builder.Source, builder.AppId, builder.Component)
+            builder.LogMessage = new LumberjackMessage(builder.Source, builder.AppId, builder.Component, logLevel, message)
             { Tags = new HashSet<string>() };
             return builder;
         }
@@ -65,6 +65,15 @@ namespace NLog.Targets.Lumberjack
                 throw new ArgumentException("Message not set");
             }
             builder.LogMessage.Tags.UnionWith(tags);
+            return builder;
+        }
+        public static LumberjackMessageBuilder WithTags(this LumberjackMessageBuilder builder, params Guid[] tags)
+        {
+            if (builder.LogMessage == null)
+            {
+                throw new ArgumentException("Message not set");
+            }
+            builder.LogMessage.Tags.UnionWith(tags.Select(i => i.ToString("N")));
             return builder;
         }
         public static LumberjackMessageBuilder WithField(this LumberjackMessageBuilder builder, string name, object value)

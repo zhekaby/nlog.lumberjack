@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NLog.Common;
 using Newtonsoft.Json;
 using NLog.Config;
-
+using System.Globalization;
 
 namespace NLog.Targets.Lumberjack
 {
@@ -59,15 +59,18 @@ namespace NLog.Targets.Lumberjack
             Array.ForEach(logEvents, e => Write(e));
         }
 
+        Random rnd = new Random();
         private byte[] CreatePacket(LogEventInfo logEvent)
         {
             var data = logEvent.Properties["data"] as LumberjackMessageBase;
+            var dt = DateTime.UtcNow.AddDays(-rnd.Next(0, 7));
             var log = new Dictionary<string, object>
             {
                 { "source", data.Source  },
                 { "app_id", data.ApplicationId },
                 { "component", data.Component },
-                { "@timestamp", DateTime.UtcNow.ToString("s") + "Z" }
+                { "@ts", dt.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) + "Z" },
+                { "@date", dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }
             };
 
             if (!string.IsNullOrWhiteSpace(data.MachineName))

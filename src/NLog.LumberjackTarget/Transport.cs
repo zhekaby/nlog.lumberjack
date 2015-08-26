@@ -46,14 +46,21 @@ namespace NLog.Targets.Lumberjack
                 do
                 {
                     byte[] packet;
+                    var buffer = new byte[256];
                     while (queue.TryPeek(out packet))
                     {
                         try
                         {
                             await EnsureConnectedAsync();
-                            await stream.WriteAsync(packet, 0, packet.Length);
+                            //using (var cts = new CancellationTokenSource(100))
+                            //{
+                            await stream.WriteAsync(packet, 0, packet.Length, cts.Token);
+                            var cnt = await stream.ReadAsync(buffer, 0, buffer.Length);
+                            //Array.Resize(ref buffer, cnt);
+                            //}
+
                         }
-                        catch
+                        catch (Exception ex)
                         {
                             CloseStream();
                             break;

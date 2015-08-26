@@ -22,10 +22,12 @@ namespace NLog.Targets.Lumberjack
 
     public class LumberjackMessage : LumberjackMessageBase
     {
-        public LumberjackMessage(string source, string applicationId, string component)
+        public LumberjackMessage(string source, string applicationId, string component, LogLevel level, string
+             message)
             : base(source, applicationId, component)
         {
-            Level = LogLevel.Trace;
+            Level = level;
+            Message = message;
             Tags = new HashSet<string>();
         }
 
