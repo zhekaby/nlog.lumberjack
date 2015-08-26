@@ -67,6 +67,7 @@ namespace NLog.Targets.Lumberjack
                 { "source", data.Source  },
                 { "app_id", data.ApplicationId },
                 { "component", data.Component },
+                { "@timestamp", DateTime.UtcNow.ToString("s") + "Z" }
             };
 
             if (!string.IsNullOrWhiteSpace(data.MachineName))
