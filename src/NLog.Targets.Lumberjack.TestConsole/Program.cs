@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NLog.Logstash;
 
 namespace NLog.Targets.Lumberjack.TestConsole
 {
@@ -18,14 +21,29 @@ namespace NLog.Targets.Lumberjack.TestConsole
 
         private static void Main(string[] args)
         {
+            var o = new
+            {
+                A = @"asfd
+sadf
+asdfasdf
+
+sdf"
+
+            };
+            var x = JObject.FromObject(o);
+            var str = x.ToString(Formatting.None);
+        }
+
+        private static void Test01()
+        {
             IList<LogLevel> logs =
-                    Enumerable.Range(0, 1000).Select(i => LogLevel.Trace)
-                .Concat(Enumerable.Range(0, 500).Select(i => LogLevel.Debug))
-                .Concat(Enumerable.Range(0, 300).Select(i => LogLevel.Info))
-                .Concat(Enumerable.Range(0, 100).Select(i => LogLevel.Warn))
-                .Concat(Enumerable.Range(0, 50).Select(i => LogLevel.Error))
-                .Concat(Enumerable.Range(0, 30).Select(i => LogLevel.Error))
-                .ToList();
+                Enumerable.Range(0, 1000).Select(i => LogLevel.Trace)
+                    .Concat(Enumerable.Range(0, 500).Select(i => LogLevel.Debug))
+                    .Concat(Enumerable.Range(0, 300).Select(i => LogLevel.Info))
+                    .Concat(Enumerable.Range(0, 100).Select(i => LogLevel.Warn))
+                    .Concat(Enumerable.Range(0, 50).Select(i => LogLevel.Error))
+                    .Concat(Enumerable.Range(0, 30).Select(i => LogLevel.Error))
+                    .ToList();
 
             var apps = new[] { "vp", "db", "ca", "sms", "email" };
             var modules = new[] { "auth", "parse", "fetch", "load", "upload", "ocr" };
@@ -35,7 +53,6 @@ namespace NLog.Targets.Lumberjack.TestConsole
 
             for (;;)
             {
-
                 for (int i = 0; i < modules.Length; i++)
                 {
                     for (int j = 0; j < apps.Length; j++)
@@ -47,26 +64,27 @@ namespace NLog.Targets.Lumberjack.TestConsole
                             var lvl = logs[rnd.Next(0, logs.Count)];
 
                             nlog.Setup("yourid", app, module)
-                       .Log(lvl, data[rnd.Next(0, data.Length)])
-                       .WithTags(Guid.NewGuid())
-                       .WithTags(app + module, Guid.NewGuid().ToString("N"))
-                       .WithField("timeout", 0.3)
-                       .WithFields(new Dictionary<string, object> {
-                                { "cpu", rnd.NextDouble()},
-                                { "mem", rnd.Next(256, 1025)},
-                                { "text", data[rnd.Next(0, data.Length)]},
-                                { "pc", Environment.MachineName},
-                                { "ams", "NLog.LumberjackTarget"},
-                                { "tmp", Path.GetTempPath()},
-                                { "os", Environment.OSVersion.ToString()},
-                                { "cpucnt", Environment.ProcessorCount},
-                                { "domain", Environment.UserDomainName},
-                                { "version", Environment.Version},
-                                { "stacktrace", Environment.StackTrace},
-                       })
-                       //.Alert("myrule", "event raised!")
-                       //.Measure("auth", 100)
-                       .Commit();
+                                .Log(lvl, data[rnd.Next(0, data.Length)])
+                                .WithTags(Guid.NewGuid())
+                                .WithTags(app + module, Guid.NewGuid().ToString("N"))
+                                .WithField("timeout", 0.3)
+                                .WithFields(new Dictionary<string, object>
+                                {
+                                    {"cpu", rnd.NextDouble()},
+                                    {"mem", rnd.Next(256, 1025)},
+                                    {"text", data[rnd.Next(0, data.Length)]},
+                                    {"pc", Environment.MachineName},
+                                    {"ams", "NLog.LumberjackTarget"},
+                                    {"tmp", Path.GetTempPath()},
+                                    {"os", Environment.OSVersion.ToString()},
+                                    {"cpucnt", Environment.ProcessorCount},
+                                    {"domain", Environment.UserDomainName},
+                                    {"version", Environment.Version},
+                                    {"stacktrace", Environment.StackTrace},
+                                })
+                                //.Alert("myrule", "event raised!")
+                                //.Measure("auth", 100)
+                                .Commit();
                         }
                         Thread.Sleep(50000);
                     }
@@ -75,6 +93,7 @@ namespace NLog.Targets.Lumberjack.TestConsole
             }
         }
 
+        #region sentences
         static string[] messages = new[] {
             @"Historically, the world of data and the world of objects " ,
         @"have not been well integrated. Programmers work in C# or Visual Basic " ,
@@ -118,5 +137,7 @@ Sadler, a senior at California State University in Sacramento, was on his first 
 When his friends jumped the gunman and took him down, he and another passenger helped restrain him and ensure he stayed down.
 For each State which ratifies, accepts or approves the present Convention or accedes thereto after the deposit of the tenth instrument of ratification, acceptance, approval or accession, the present Convention shall enter into force 90 days after the deposit by such State of its instrument of ratification, acceptance, approval or accession.
 ";
+
+        #endregion
     }
 }

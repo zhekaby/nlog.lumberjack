@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace NLog.Targets.Lumberjack
+namespace NLog.Logstash
 {
-    public abstract class LumberjackMessageBase
+    public abstract class LogstashMessageBase
     {
-        public LumberjackMessageBase() { }
+        protected LogstashMessageBase() { }
 
-        public LumberjackMessageBase(string source, string applicationId, string component)
+        protected LogstashMessageBase(string source, string applicationId, string component)
         {
             Source = source;
             ApplicationId = applicationId;
@@ -20,9 +19,9 @@ namespace NLog.Targets.Lumberjack
         public string MachineName { get; set; }
     }
 
-    public class LumberjackMessage : LumberjackMessageBase
+    public class LogstashMessage : LogstashMessageBase
     {
-        public LumberjackMessage(string source, string applicationId, string component, LogLevel level, string
+        public LogstashMessage(string source, string applicationId, string component, LogLevel level, string
              message)
             : base(source, applicationId, component)
         {
@@ -37,9 +36,9 @@ namespace NLog.Targets.Lumberjack
         public HashSet<string> Tags { get; set; }
     }
 
-    public class LumberjackMetricMessage : LumberjackMessageBase
+    public class LogstashMetricMessage : LogstashMessageBase
     {
-        public LumberjackMetricMessage(string source, string applicationId, string component, string name, double value, long timestamp)
+        public LogstashMetricMessage(string source, string applicationId, string component, string name, double value, long timestamp)
             : base(source, applicationId, component)
         {
             Name = name;
@@ -51,9 +50,9 @@ namespace NLog.Targets.Lumberjack
         public string Name { get; set; }
     }
 
-    public class LumberjackAlertMessage : LumberjackMessageBase
+    public class LogstashAlertMessage : LogstashMessageBase
     {
-        public LumberjackAlertMessage(string source, string applicationId, string component, string ruleName, string text)
+        public LogstashAlertMessage(string source, string applicationId, string component, string ruleName, string text)
              : base(source, applicationId, component)
         {
             Text = text;

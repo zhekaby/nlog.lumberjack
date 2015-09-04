@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("NLog lumberjack protocol")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("zhekaby")]
-[assembly: AssemblyProduct("NLog.Targets.Lumberjack")]
+[assembly: AssemblyProduct("NLog.Logstash")]
 [assembly: AssemblyCopyright("Copyright © 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

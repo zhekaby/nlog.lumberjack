@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NLog.Targets.Lumberjack
+namespace NLog.Logstash
 {
     public class LumberjackMessageBuilder
     {
         public readonly NLog.Logger Logger;
-        public LumberjackMessage LogMessage;
-        public LumberjackAlertMessage AlertMessage;
-        public LumberjackMetricMessage MetricMessage;
+        public LogstashMessage LogMessage;
+        public LogstashAlertMessage AlertMessage;
+        public LogstashMetricMessage MetricMessage;
         public readonly string Source, AppId, Component;
         public LumberjackMessageBuilder(NLog.Logger logger, string source, string appId, string component)
         {
@@ -28,7 +26,7 @@ namespace NLog.Targets.Lumberjack
     {
         public static LumberjackMessageBuilder Log(this LumberjackMessageBuilder builder, LogLevel logLevel, string message)
         {
-            builder.LogMessage = new LumberjackMessage(builder.Source, builder.AppId, builder.Component, logLevel, message)
+            builder.LogMessage = new LogstashMessage(builder.Source, builder.AppId, builder.Component, logLevel, message)
             { Tags = new HashSet<string>() };
             return builder;
         }
@@ -113,18 +111,18 @@ namespace NLog.Targets.Lumberjack
         }
         public static LumberjackMessageBuilder Alert(this LumberjackMessageBuilder builder, string name, string message)
         {
-            builder.AlertMessage = new LumberjackAlertMessage(builder.Source, builder.AppId, builder.Component, name, message);
+            builder.AlertMessage = new LogstashAlertMessage(builder.Source, builder.AppId, builder.Component, name, message);
             return builder;
         }
         public static LumberjackMessageBuilder Measure(this LumberjackMessageBuilder builder, string name, double value)
         {
             var ts = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-            builder.MetricMessage = new LumberjackMetricMessage(builder.Source, builder.AppId, builder.Component, name, value, ts);
+            builder.MetricMessage = new LogstashMetricMessage(builder.Source, builder.AppId, builder.Component, name, value, ts);
             return builder;
         }
         public static LumberjackMessageBuilder Measure(this LumberjackMessageBuilder builder, string name, double value, long timestamp)
         {
-            builder.MetricMessage = new LumberjackMetricMessage(builder.Source, builder.AppId, builder.Component, name, value, timestamp);
+            builder.MetricMessage = new LogstashMetricMessage(builder.Source, builder.AppId, builder.Component, name, value, timestamp);
             return builder;
         }
         public static void Commit(this LumberjackMessageBuilder builder)
