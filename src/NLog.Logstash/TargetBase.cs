@@ -18,14 +18,18 @@ namespace NLog.Logstash
         protected byte[] CreatePacket(LogEventInfo logEvent)
         {
             var data = logEvent.Properties["data"] as LogstashMessageBase;
+
+            if (data == null)
+                throw new ArgumentException("Incorrect target usage");
+
             var dt = DateTime.UtcNow;
             var log = new Dictionary<string, object>
             {
                 { "source", data.Source  },
                 { "app_id", data.ApplicationId },
                 { "component", data.Component },
-                { "@ts", dt.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) + "Z" },
-                { "@date", dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }
+                { "ts", dt.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) + "Z" },
+                { "date", dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) }
             };
 
             if (!string.IsNullOrWhiteSpace(data.MachineName))
@@ -40,11 +44,11 @@ namespace NLog.Logstash
                     log["type"] = "logs";
                     log["level"] = message.Level.Name;
                     log["line"] = message.Message;
-                    log["props"] = JsonConvert.SerializeObject(new Dictionary<string, object>
+                    log["props"] = new Dictionary<string, object>
                     {
                         { "fields", message.Fields },
                         { "tags", message.Tags }
-                    });
+                    };
 
                     return Protocol.CreatePacket(log, logEvent.SequenceID);
                 }

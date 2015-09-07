@@ -17,21 +17,45 @@ namespace NLog.Targets.Lumberjack.TestConsole
         private static readonly NLog.Logger nlog = NLog.LogManager.GetCurrentClassLogger();
 
 
+
         static Random rnd = new Random();
 
         private static void Main(string[] args)
         {
-            var o = new
+            //sending metric
+            var message = new LogstashMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), new Random().Next(50, 100))
             {
-                A = @"asfd
-sadf
-asdfasdf
-
-sdf"
-
+                MachineName = Environment.MachineName
             };
-            var x = JObject.FromObject(o);
-            var str = x.ToString(Formatting.None);
+            nlog.Measure(message);
+
+
+            // sending log
+            var log = new LogstashMessage("yourid", "backend", "vp", LogLevel.Info, "My info message")
+            {
+                Tags = new HashSet<string> { "tag01", "tag02", "tag03" },
+                Fields = new Dictionary<string, object> {
+                        { "mem", "256"},
+                        { "load", 0.3},
+                    },
+                MachineName = Environment.MachineName
+            };
+            nlog.Log(log);
+
+            //sending alert
+            var alert = new LogstashAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!")
+            {
+                MachineName = Environment.MachineName
+            };
+            nlog.Alert(alert);
+
+            Thread.Sleep(TimeSpan.FromSeconds(2000));
+        }
+
+        private static long UnixTimeNow()
+        {
+            var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+            return (long)timeSpan.TotalSeconds;
         }
 
         private static void Test01()

@@ -9,7 +9,7 @@ namespace NLog.Logstash
     abstract class TransportBase : IDisposable
     {
         private Stream _stream;
-        
+
         protected int QueueCapacity { get; set; } = 50000;
 
         private readonly ConcurrentQueue<byte[]> _queue = new ConcurrentQueue<byte[]>();
@@ -47,8 +47,6 @@ namespace NLog.Logstash
 
                             await _stream.WriteAsync(packet, 0, packet.Length, token);
                             await _stream.FlushAsync(token);
-                            var cnt = await _stream.ReadAsync(buffer, 0, buffer.Length, token);
-
                         }
                         catch (Exception)
                         {

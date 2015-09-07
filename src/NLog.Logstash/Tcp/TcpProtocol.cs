@@ -8,7 +8,7 @@ namespace NLog.Logstash.Tcp
     {
         public byte[] CreatePacket(IDictionary<string, object> data, int sequenceId)
         {
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data) + "\n");
         }
     }
 }
