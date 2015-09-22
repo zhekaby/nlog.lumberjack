@@ -37,7 +37,6 @@ namespace NLog.Logstash
                 do
                 {
                     byte[] packet;
-                    var buffer = new byte[256];
                     while (_queue.TryPeek(out packet))
                     {
                         try

@@ -23,33 +23,39 @@ namespace NLog.Targets.Lumberjack.TestConsole
         private static void Main(string[] args)
         {
             //sending metric
-            var message = new LogstashMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), new Random().Next(50, 100))
-            {
-                MachineName = Environment.MachineName
-            };
-            nlog.Measure(message);
+            //var message = new LogstashMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), new Random().Next(50, 100))
+            //{
+            //    MachineName = Environment.MachineName
+            //};
+            //nlog.Measure(message);
 
 
             // sending log
-            var log = new LogstashMessage("yourid", "backend", "vp", LogLevel.Info, "My info message")
+            while (true)
             {
-                Tags = new HashSet<string> { "tag01", "tag02", "tag03" },
-                Fields = new Dictionary<string, object> {
+                var log = new LogstashMessage("yourid", "backend", "vp", LogLevel.Info, "My info message")
+                {
+                    Tags = new HashSet<string> { "tag01", "tag02", "tag03" },
+                    Fields = new Dictionary<string, object> {
                         { "mem", "256"},
                         { "load", 0.3},
                     },
-                MachineName = Environment.MachineName
-            };
-            nlog.Log(log);
+                    MachineName = Environment.MachineName
+                };
+                nlog.Log(log);
+
+                Thread.Sleep(5000);
+            }
+            
 
             //sending alert
-            var alert = new LogstashAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!")
-            {
-                MachineName = Environment.MachineName
-            };
-            nlog.Alert(alert);
+            //var alert = new LogstashAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!")
+            //{
+            //    MachineName = Environment.MachineName
+            //};
+            //nlog.Alert(alert);
 
-            Thread.Sleep(TimeSpan.FromSeconds(2000));
+            
         }
 
         private static long UnixTimeNow()
