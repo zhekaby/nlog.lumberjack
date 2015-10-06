@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using NLog.Targets.Lumberjack;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.IO;
@@ -16,18 +17,26 @@ namespace NLog.Targets.Lumberjack.TestConsole
     {
         private static readonly NLog.Logger nlog = NLog.LogManager.GetCurrentClassLogger();
 
-
-
+        static readonly PerformanceCounter CpuCounter = new PerformanceCounter()
+        {
+            CategoryName = "Processor",
+            CounterName = "% Processor Time",
+            InstanceName = "_Total"
+        };
         static Random rnd = new Random();
 
         private static void Main(string[] args)
         {
-            //sending metric
-            //var message = new LogstashMetricMessage("yourid", "backend", "vp", "auth", UnixTimeNow(), new Random().Next(50, 100))
-            //{
-            //    MachineName = Environment.MachineName
-            //};
-            //nlog.Measure(message);
+            while (true)
+            {
+                //sending metric
+                var message = new LogstashMetricMessage("yourid", "backend", "vp", "cpu", CpuCounter.NextValue(), UnixTimeNow())
+                {
+                    MachineName = Environment.MachineName
+                };
+                nlog.Measure(message);
+                Thread.Sleep(5);
+            }
 
 
             // sending log
@@ -46,7 +55,7 @@ namespace NLog.Targets.Lumberjack.TestConsole
 
                 Thread.Sleep(5000);
             }
-            
+
 
             //sending alert
             //var alert = new LogstashAlertMessage("yourid", "backend", "vp", "myrule", "Event raised!")
@@ -55,7 +64,7 @@ namespace NLog.Targets.Lumberjack.TestConsole
             //};
             //nlog.Alert(alert);
 
-            
+
         }
 
         private static long UnixTimeNow()

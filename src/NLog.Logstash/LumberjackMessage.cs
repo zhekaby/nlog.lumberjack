@@ -30,7 +30,7 @@ namespace NLog.Logstash
             Tags = new HashSet<string>();
         }
 
-        public LogLevel Level { get; set; }
+        public LogLevel Level { get; }
         public string Message { get; set; }
         public Dictionary<string, object> Fields { get; set; }
         public HashSet<string> Tags { get; set; }
